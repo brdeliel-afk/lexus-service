@@ -1,1 +1,845 @@
-<!DOCTYPE html><html lang="he" dir="rtl"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>מזכיר שירות</title></head><body><h1>טוען...</h1><script>window.location.href='/app.html'</script></body></html>
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+<meta name="apple-mobile-web-app-title" content="מזכיר שירות"/>
+<link rel="manifest" href="/manifest.json"/>
+<title>מזכיר שירות לקסוס</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;direction:rtl;background:#f5f5f5;color:#1a1a1a;font-size:15px;}
+:root{--blue:#1a6fbd;--blue-bg:#e8f1fb;--green:#2d7a3a;--green-bg:#e8f5ea;--red:#c0392b;--red-bg:#fdecea;--orange:#b35a00;--orange-bg:#fef3e2;--border:rgba(0,0,0,0.12);--radius:8px;--radius-lg:12px;}
+.app{max-width:390px;margin:0 auto;padding-bottom:80px;min-height:100vh;}
+.topbar{background:#fff;padding:12px 14px 9px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;}
+.topbar-title{font-size:15px;font-weight:600;color:#1a1a1a;}
+.topbar-date{font-size:11px;color:#888;margin-top:1px;}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.icon-btn{background:none;border:none;font-size:18px;padding:4px;cursor:pointer;}
+.clock{font-size:12px;color:#888;font-weight:500;}
+.banners{padding:0 12px;}
+.banner{border-radius:var(--radius);padding:8px 11px;margin-top:7px;font-size:12px;}
+.banner-t{font-weight:600;margin-bottom:2px;}
+.bwarn{background:var(--orange-bg);color:var(--orange);}
+.bdanger{background:var(--red-bg);color:var(--red);}
+.binfo{background:var(--blue-bg);color:var(--blue);cursor:pointer;}
+.summary{margin:9px 12px 0;background:var(--blue-bg);border-radius:var(--radius-lg);padding:10px 12px;}
+.sum-t{font-size:12px;font-weight:600;color:var(--blue);margin-bottom:7px;}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+.stat{background:#fff;border-radius:var(--radius);padding:7px 9px;text-align:center;border:1px solid var(--border);}
+.stat-n{font-size:20px;font-weight:700;color:#1a1a1a;}
+.stat-l{font-size:11px;color:#888;}
+.stat-red .stat-n{color:var(--red);}
+.tabs{display:flex;background:#fff;border-bottom:1px solid var(--border);margin-top:9px;overflow-x:auto;}
+.tab{flex:1;min-width:60px;padding:9px 2px;text-align:center;font-size:10px;color:#888;cursor:pointer;border-bottom:2px solid transparent;border-top:none;border-left:none;border-right:none;background:none;display:flex;flex-direction:column;align-items:center;gap:2px;white-space:nowrap;}
+.tab span:first-child{font-size:14px;}
+.tab.active{color:#1a1a1a;border-bottom-color:#1a1a1a;font-weight:600;}
+.sec{display:none;padding:10px 12px;}
+.sec.active{display:block;}
+.search-input{width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:var(--radius);font-size:13px;background:#fff;color:#1a1a1a;direction:rtl;margin-bottom:9px;-webkit-appearance:none;}
+.add-btn{width:100%;padding:8px;background:#f0f0f0;border:1px dashed #aaa;border-radius:var(--radius);color:#888;font-size:13px;cursor:pointer;margin-bottom:9px;display:flex;align-items:center;justify-content:center;gap:5px;}
+.chips{display:flex;gap:5px;margin-bottom:9px;flex-wrap:wrap;}
+.chip{padding:4px 10px;border-radius:20px;border:1px solid var(--border);background:#f0f0f0;font-size:12px;color:#888;cursor:pointer;}
+.chip.on{background:#1a1a1a;color:#fff;border-color:#1a1a1a;}
+.card{background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:10px 12px;margin-bottom:7px;}
+.card-high{border-right:3px solid var(--red);border-radius:0 var(--radius-lg) var(--radius-lg) 0;}
+.card-med{border-right:3px solid #f39c12;border-radius:0 var(--radius-lg) var(--radius-lg) 0;}
+.card-low{border-right:3px solid var(--green);border-radius:0 var(--radius-lg) var(--radius-lg) 0;}
+.card-row{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;}
+.card-name{font-size:14px;font-weight:600;color:#1a1a1a;}
+.card-meta{font-size:11px;color:#888;margin-top:2px;display:flex;gap:6px;flex-wrap:wrap;}
+.card-note{font-size:12px;color:#666;margin:5px 0;line-height:1.5;}
+.badge{font-size:11px;padding:2px 7px;border-radius:var(--radius);white-space:nowrap;}
+.b-me{background:var(--red-bg);color:var(--red);}
+.b-mgr{background:var(--orange-bg);color:var(--orange);}
+.b-pts{background:var(--blue-bg);color:var(--blue);}
+.rem-tag{font-size:11px;color:#999;margin-bottom:4px;}
+.rem-od{color:var(--red);}
+.cust-note{font-size:11px;background:var(--orange-bg);border-radius:var(--radius);padding:4px 8px;color:var(--orange);margin-bottom:5px;}
+.acts{display:flex;gap:4px;flex-wrap:wrap;}
+.tb{padding:5px 8px;border:1px solid var(--border);border-radius:var(--radius);background:#f0f0f0;font-size:11px;color:#666;cursor:pointer;display:flex;align-items:center;gap:3px;}
+.tb-blue{color:var(--blue);border-color:#b5d4f4;background:var(--blue-bg);}
+.tb-green{color:var(--green);border-color:#c0dd97;background:var(--green-bg);}
+.tb-red{color:var(--red);border-color:#f7c1c1;background:transparent;}
+.tb-orange{color:var(--orange);border-color:#fac775;background:var(--orange-bg);}
+.snooze{display:flex;gap:4px;margin-top:5px;}
+.snz-btn{flex:1;padding:4px;border:1px solid var(--border);border-radius:var(--radius);background:#f0f0f0;font-size:11px;color:#666;cursor:pointer;text-align:center;}
+.vtog{display:flex;gap:5px;margin-bottom:9px;}
+.vt-btn{flex:1;padding:7px;border:1px solid var(--border);border-radius:var(--radius);background:#f0f0f0;font-size:12px;color:#888;cursor:pointer;text-align:center;}
+.vt-btn.on{background:#1a1a1a;color:#fff;border-color:#1a1a1a;}
+.tl-day{margin-bottom:13px;}
+.tl-dlbl{font-size:11px;font-weight:600;color:#999;letter-spacing:.04em;margin-bottom:6px;}
+.tl-dlbl.tod{color:var(--blue);}
+.tl-item{display:flex;gap:8px;margin-bottom:6px;align-items:flex-start;}
+.tl-time{font-size:12px;color:#888;min-width:36px;padding-top:3px;text-align:right;}
+.tl-line{display:flex;flex-direction:column;align-items:center;padding-top:5px;}
+.tl-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.dp{background:var(--blue);}
+.dr{background:var(--green);}
+.do{background:var(--red);}
+.tl-bar{width:1px;flex:1;min-height:16px;background:var(--border);}
+.tl-card{flex:1;background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:9px 11px;min-width:0;}
+.tl-cp{border-right:3px solid var(--blue);border-radius:0 var(--radius-lg) var(--radius-lg) 0;}
+.tl-cr{border-right:3px solid var(--green);border-radius:0 var(--radius-lg) var(--radius-lg) 0;}
+.tl-co{border-right:3px solid var(--red);border-radius:0 var(--radius-lg) var(--radius-lg) 0;}
+.tl-type{font-size:11px;font-weight:600;margin-bottom:2px;}
+.ttp{color:var(--blue);}
+.ttr{color:var(--green);}
+.tto{color:var(--red);}
+.tl-name{font-size:13px;font-weight:600;color:#1a1a1a;}
+.tl-sub{font-size:11px;color:#888;margin-top:2px;line-height:1.5;}
+.fleet-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:12px 13px;margin-bottom:7px;}
+.fleet-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.fleet-name{font-size:14px;font-weight:600;color:#1a1a1a;}
+.fleet-plate{font-size:11px;color:#888;}
+.av-badge{font-size:12px;padding:3px 9px;border-radius:var(--radius);}
+.av-free{background:var(--green-bg);color:var(--green);}
+.av-busy{background:var(--red-bg);color:var(--red);}
+.av-warn{background:var(--orange-bg);color:var(--orange);}
+.fleet-bk{margin-top:7px;border-top:1px solid var(--border);padding-top:6px;}
+.bk-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid var(--border);}
+.bk-row:last-child{border-bottom:none;}
+.bk-name{font-size:12px;color:#1a1a1a;}
+.bk-dates{font-size:11px;color:#888;}
+.ai-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:12px;margin-bottom:9px;}
+.ai-card label{font-size:12px;color:#888;display:block;margin-bottom:3px;}
+.ai-card select,.ai-card textarea{width:100%;border:1px solid var(--border);border-radius:var(--radius);padding:7px 10px;font-size:13px;font-family:inherit;color:#1a1a1a;background:#f5f5f5;direction:rtl;-webkit-appearance:none;}
+.ai-card textarea{resize:none;line-height:1.5;}
+.ai-result{margin-top:8px;background:var(--green-bg);border:1px solid #c0dd97;border-radius:var(--radius);padding:10px 11px;font-size:13px;color:var(--green);line-height:1.6;display:none;white-space:pre-wrap;}
+.ai-loading{display:none;margin-top:6px;font-size:12px;color:#888;padding:5px;}
+.hist-item{background:#f0f0f0;border-radius:var(--radius);padding:9px 11px;margin-bottom:5px;border:1px solid var(--border);}
+.hist-hdr{display:flex;justify-content:space-between;margin-bottom:3px;}
+.hist-name{font-size:13px;font-weight:600;color:#1a1a1a;}
+.hist-date{font-size:11px;color:#999;}
+.hist-note{font-size:12px;color:#666;line-height:1.4;}
+.hist-closing{font-size:12px;color:var(--green);margin-top:3px;}
+.set-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:2px 13px;margin-bottom:7px;}
+.set-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);}
+.set-row:last-child{border-bottom:none;}
+.set-label2{font-size:13px;color:#1a1a1a;}
+.set-sub{font-size:11px;color:#888;margin-top:1px;}
+.set-input{border:1px solid var(--border);border-radius:var(--radius);padding:5px 8px;font-size:13px;background:#f5f5f5;color:#1a1a1a;direction:rtl;-webkit-appearance:none;}
+.empty{text-align:center;color:#888;font-size:13px;padding:28px 0;line-height:2;}
+.export-box{background:#f0f0f0;border-radius:var(--radius);padding:12px;margin-bottom:12px;font-size:12px;color:#1a1a1a;line-height:1.7;direction:rtl;white-space:pre-wrap;max-height:300px;overflow-y:auto;}
+.overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.45);z-index:100;align-items:flex-end;justify-content:center;}
+.overlay.open{display:flex;}
+.modal{background:#fff;border-radius:var(--radius-lg) var(--radius-lg) 0 0;padding:16px 15px;width:100%;max-width:390px;max-height:88vh;overflow-y:auto;}
+.modal-title{font-size:15px;font-weight:600;margin-bottom:12px;color:#1a1a1a;}
+.field{margin-bottom:10px;}
+.field label{font-size:12px;color:#888;display:block;margin-bottom:3px;}
+.field input,.field select,.field textarea{width:100%;border:1px solid var(--border);border-radius:var(--radius);padding:8px 10px;font-size:14px;font-family:inherit;background:#f5f5f5;color:#1a1a1a;direction:rtl;-webkit-appearance:none;}
+.field textarea{resize:none;line-height:1.5;}
+.pri-row{display:flex;gap:5px;}
+.pri-opt{flex:1;padding:7px;border:1px solid var(--border);border-radius:var(--radius);font-size:12px;cursor:pointer;text-align:center;background:#f0f0f0;color:#888;}
+.pri-high{background:var(--red-bg);color:var(--red);border-color:#f7c1c1;}
+.pri-med{background:var(--orange-bg);color:var(--orange);border-color:#fac775;}
+.pri-low{background:var(--green-bg);color:var(--green);border-color:#c0dd97;}
+.macts{display:flex;gap:7px;margin-top:13px;}
+.btn-cancel{flex:1;padding:10px;border:1px solid var(--border);border-radius:var(--radius);background:#f0f0f0;font-size:14px;cursor:pointer;color:#888;font-family:inherit;}
+.btn-save{flex:2;padding:10px;border:none;border-radius:var(--radius);background:#1a1a1a;font-size:14px;cursor:pointer;color:#fff;font-family:inherit;font-weight:600;}
+.conf-banner{background:var(--red-bg);border:1px solid #f7c1c1;border-radius:var(--radius);padding:7px 10px;margin-bottom:9px;font-size:12px;color:var(--red);display:none;}
+.remind-preview{background:#f0f0f0;border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;margin-bottom:14px;}
+.remind-preview-name{font-size:14px;font-weight:600;color:#1a1a1a;margin-bottom:3px;}
+.remind-preview-note{font-size:12px;color:#888;line-height:1.5;}
+.quick-btns{display:flex;gap:6px;margin-top:8px;margin-bottom:4px;}
+.quick-btn{flex:1;padding:7px 4px;border:1px solid var(--border);border-radius:var(--radius);background:#f0f0f0;font-size:12px;color:#888;cursor:pointer;text-align:center;}
+.copy-btn{width:100%;margin-top:5px;padding:6px;border:1px solid #c0dd97;border-radius:var(--radius);background:transparent;font-size:12px;color:var(--green);cursor:pointer;font-family:inherit;}
+.sec-label{font-size:11px;color:#999;letter-spacing:.04em;margin-bottom:7px;font-weight:600;}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="topbar">
+  <div>
+    <div class="topbar-title">🚗 מזכיר שירות לקסוס</div>
+    <div class="topbar-date" id="dateDisp"></div>
+  </div>
+  <div class="topbar-right">
+    <button class="icon-btn" onclick="showExport()">📤</button>
+    <button class="icon-btn" onclick="showTab('settings')">⚙️</button>
+    <span class="clock" id="clockDisp"></span>
+  </div>
+</div>
+<div class="banners" id="alertBanners"></div>
+<div class="summary" style="margin:9px 12px 0;">
+  <div class="sum-t">☀️ סיכום יום — <span id="dayName"></span></div>
+  <div class="stats-grid">
+    <div class="stat stat-red"><div class="stat-n" id="sU">0</div><div class="stat-l">דחוף — ממתין לי</div></div>
+    <div class="stat"><div class="stat-n" id="sO">0</div><div class="stat-l">משימות פתוחות</div></div>
+    <div class="stat"><div class="stat-n" id="sC">0</div><div class="stat-l">חליפי תפוס</div></div>
+    <div class="stat"><div class="stat-n" id="sR">0</div><div class="stat-l">תזכורות היום</div></div>
+  </div>
+</div>
+<div class="tabs">
+  <button class="tab active" onclick="showTab('tasks')"><span>✅</span><span>משימות</span></button>
+  <button class="tab" onclick="showTab('cars')"><span>🚗</span><span>חליפי</span></button>
+  <button class="tab" onclick="showTab('ai')"><span>💬</span><span>ניסוח</span></button>
+  <button class="tab" onclick="showTab('hist')"><span>🕐</span><span>היסטוריה</span></button>
+  <button class="tab" onclick="showTab('settings')"><span>⚙️</span><span>הגדרות</span></button>
+</div>
+<div id="tab-tasks" class="sec active">
+  <input class="search-input" placeholder="חיפוש לקוח / רכב..." oninput="render()" id="taskSearch"/>
+  <button class="add-btn" onclick="openTaskModal()">+ משימה חדשה</button>
+  <div class="chips" id="filterChips"></div>
+  <div id="taskList"></div>
+</div>
+<div id="tab-cars" class="sec">
+  <div class="vtog">
+    <button class="vt-btn on" id="vt-tl" onclick="setCV('tl')">📅 לוח זמנים</button>
+    <button class="vt-btn" id="vt-fl" onclick="setCV('fl')">📋 צי רכבים</button>
+  </div>
+  <button class="add-btn" onclick="openBookingModal()">+ הזמנת חליפי חדשה</button>
+  <div id="cv-tl"><div id="tlContent"></div></div>
+  <div id="cv-fl" style="display:none"><div id="flContent"></div></div>
+</div>
+<div id="tab-ai" class="sec">
+  <div class="ai-card">
+    <label>סוג ניסוח</label>
+    <select id="aiType" style="margin-bottom:8px;">
+      <option value="rejection">דחיית בקשת אחריות</option>
+      <option value="delay">עיכוב בחלק / תיקון</option>
+      <option value="price">הצגת מחיר גבוה</option>
+      <option value="ready">רכב מוכן לאיסוף</option>
+      <option value="followup">מעקב / חזרה ללקוח</option>
+      <option value="other">אחר</option>
+    </select>
+    <label>פרטי הסיטואציה</label>
+    <textarea id="aiSit" rows="3" placeholder="שם לקוח, רכב, בקשה..."></textarea>
+    <label style="margin-top:8px;">תשובה / מידע שיש לך</label>
+    <textarea id="aiAns" rows="2" placeholder="תשובת המנהל..."></textarea>
+    <button class="add-btn" style="margin-top:8px;margin-bottom:0;" onclick="genAI()">✨ נסח לי</button>
+    <div class="ai-loading" id="aiLoad">מנסח...</div>
+    <div class="ai-result" id="aiRes"></div>
+    <button id="copyBtn" style="display:none;" class="copy-btn" onclick="copyAI()">📋 העתק</button>
+  </div>
+  <div style="font-size:11px;color:#999;text-align:center;">ניסוח מותאם לשפת שירות לקסוס</div>
+</div>
+<div id="tab-hist" class="sec">
+  <input class="search-input" placeholder="חיפוש בהיסטוריה..." oninput="renderHist()" id="histSearch"/>
+  <div id="histList"></div>
+</div>
+<div id="tab-settings" class="sec">
+  <div class="sec-label">תזכורת בוקר</div>
+  <div class="set-card">
+    <div class="set-row">
+      <div><div class="set-label2">שעת תזכורת</div><div class="set-sub">סיכום יומי</div></div>
+      <input type="time" class="set-input" id="morningTime" value="08:00" onchange="saveSettings()"/>
+    </div>
+  </div>
+  <div class="sec-label" style="margin-top:12px;">צי רכבים חליפיים</div>
+  <div class="set-card" id="carSettingsList"></div>
+  <button class="add-btn" onclick="addCar()">+ הוסף רכב לצי</button>
+  <div class="sec-label" style="margin-top:12px;">הערות לקוחות חוזרים</div>
+  <div class="set-card" id="custNotesList"></div>
+  <button class="add-btn" onclick="openCustNoteModal()">+ הוסף הערה</button>
+  <div class="sec-label" style="margin-top:12px;">אזור סכנה</div>
+  <div class="set-card">
+    <div class="set-row">
+      <div><div class="set-label2">מחק הכל</div></div>
+      <button class="tb tb-red" onclick="clearAll()">🗑️ מחק</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- MODALS -->
+<div class="overlay" id="exportModal">
+<div class="modal">
+  <div class="modal-title">📤 ייצוא סיכום יומי</div>
+  <div class="export-box" id="exportText"></div>
+  <div class="macts">
+    <button class="btn-cancel" onclick="closeModal('exportModal')">סגור</button>
+    <button class="btn-save" onclick="copyExport()">📋 העתק</button>
+  </div>
+</div>
+</div>
+
+<div class="overlay" id="taskModal">
+<div class="modal">
+  <div class="modal-title" id="tmTitle">משימה חדשה</div>
+  <input type="hidden" id="tm-id"/>
+  <div class="field"><label>שם לקוח *</label><input type="text" id="tm-name" placeholder="שם מלא"/></div>
+  <div class="field"><label>מספר רכב</label><input type="text" id="tm-plate" placeholder="123-45-678"/></div>
+  <div class="field"><label>טלפון</label><input type="tel" id="tm-phone" placeholder="050-0000000" dir="ltr"/></div>
+  <div class="field"><label>סטטוס</label>
+    <select id="tm-status">
+      <option value="me">ממתין לי</option>
+      <option value="manager">ממתין למנהל</option>
+      <option value="parts">ממתין למחסן</option>
+    </select>
+  </div>
+  <div class="field"><label>עדיפות</label>
+    <div class="pri-row">
+      <button class="pri-opt pri-high" id="pri-high" onclick="setPri('high')">דחוף</button>
+      <button class="pri-opt" id="pri-med" onclick="setPri('med')">רגיל</button>
+      <button class="pri-opt" id="pri-low" onclick="setPri('low')">נמוכה</button>
+    </div>
+  </div>
+  <div class="field"><label>הערה</label><textarea id="tm-note" rows="2" placeholder="מה צריך לעשות?"></textarea></div>
+  <div class="field"><label>תזכורת</label><input type="datetime-local" id="tm-remind"/></div>
+  <div class="macts">
+    <button class="btn-cancel" onclick="closeModal('taskModal')">ביטול</button>
+    <button class="btn-save" onclick="saveTask()">שמור</button>
+  </div>
+</div>
+</div>
+
+<div class="overlay" id="doneModal">
+<div class="modal">
+  <div class="modal-title">סיום משימה</div>
+  <input type="hidden" id="dm-id"/>
+  <div class="field"><label>הערת סיום (אופציונלי)</label><textarea id="dm-note" rows="2" placeholder="מה נעשה? מה הוסכם?"></textarea></div>
+  <div class="macts">
+    <button class="btn-cancel" onclick="closeModal('doneModal')">ביטול</button>
+    <button class="btn-save" onclick="confirmDone()">סיים משימה</button>
+  </div>
+</div>
+</div>
+
+<div class="overlay" id="remindModal">
+<div class="modal">
+  <div class="modal-title">🔔 הגדר תזכורת</div>
+  <input type="hidden" id="rm-task-id"/>
+  <div class="remind-preview" id="remindPreview"></div>
+  <div class="field"><label>מתי לתזכר אותך?</label><input type="datetime-local" id="rm-time"/></div>
+  <div class="quick-btns">
+    <button class="quick-btn" onclick="setQuickRemind(1)">+1 שעה</button>
+    <button class="quick-btn" onclick="setQuickRemind(2)">+2 שעות</button>
+    <button class="quick-btn" onclick="setQuickRemind(0)">מחר 8:00</button>
+  </div>
+  <div class="macts">
+    <button class="btn-cancel" onclick="closeModal('remindModal')">ביטול</button>
+    <button class="btn-save" onclick="saveRemind()">שמור תזכורת</button>
+  </div>
+</div>
+</div>
+
+<div class="overlay" id="bookingModal">
+<div class="modal">
+  <div class="modal-title" id="bmTitle">הזמנת חליפי</div>
+  <input type="hidden" id="bm-id"/>
+  <div class="conf-banner" id="confB">קונפליקט — הרכב תפוס בתאריכים אלה.</div>
+  <div class="field"><label>לקוח *</label><input type="text" id="bm-cust" placeholder="שם מלא"/></div>
+  <div class="field"><label>טלפון</label><input type="tel" id="bm-phone" placeholder="050-0000000" dir="ltr"/></div>
+  <div class="field"><label>רכב לקוח</label><input type="text" id="bm-plate" placeholder="מספר רכב"/></div>
+  <div class="field"><label>רכב חליפי</label><select id="bm-car"></select></div>
+  <div class="field"><label>תאריך ושעת איסוף *</label><input type="datetime-local" id="bm-pickup"/></div>
+  <div class="field"><label>תאריך ושעת החזרה משוערת *</label><input type="datetime-local" id="bm-return"/></div>
+  <div class="field"><label>ק"מ יציאה</label><input type="number" id="bm-km" placeholder="45000" dir="ltr"/></div>
+  <div class="field"><label>הערה</label><input type="text" id="bm-note" placeholder="אופציונלי"/></div>
+  <div class="macts">
+    <button class="btn-cancel" onclick="closeModal('bookingModal')">ביטול</button>
+    <button class="btn-save" onclick="saveBooking()">שמור</button>
+  </div>
+</div>
+</div>
+
+<div class="overlay" id="retModal">
+<div class="modal">
+  <div class="modal-title">החזרת רכב</div>
+  <input type="hidden" id="ret-id"/>
+  <div class="field"><label>ק"מ בחזרה</label><input type="number" id="ret-km" placeholder="45500" dir="ltr"/></div>
+  <div class="field"><label>מצב הרכב</label>
+    <select id="ret-cond">
+      <option value="ok">תקין</option>
+      <option value="damage">נזק / שריטה</option>
+      <option value="fuel">דלק חסר</option>
+    </select>
+  </div>
+  <div class="field"><label>הערה</label><input type="text" id="ret-note" placeholder="אופציונלי"/></div>
+  <div class="macts">
+    <button class="btn-cancel" onclick="closeModal('retModal')">ביטול</button>
+    <button class="btn-save" onclick="confirmReturn()">אשר החזרה</button>
+  </div>
+</div>
+</div>
+
+<div class="overlay" id="custNoteModal">
+<div class="modal">
+  <div class="modal-title">הערה על לקוח חוזר</div>
+  <div class="field"><label>שם לקוח</label><input type="text" id="cn-name" placeholder="שם מלא"/></div>
+  <div class="field"><label>הערה</label><textarea id="cn-note" rows="3" placeholder="לדוגמה: תמיד מאחר בהחזרת חליפי..."></textarea></div>
+  <div class="macts">
+    <button class="btn-cancel" onclick="closeModal('custNoteModal')">ביטול</button>
+    <button class="btn-save" onclick="saveCustNote()">שמור</button>
+  </div>
+</div>
+</div>
+
+<script>
+var tasks=[], bookings=[], history=[], settings={morningHour:8}, fleet=[], custNotes=[];
+var curPri='high', curFilter='all', curCV='tl';
+
+var DEFAULT_FLEET=[
+  {id:1,name:'קורולה קרוס',plate:'112-23-344'},
+  {id:2,name:'קורולה קרוס',plate:'445-56-677'},
+  {id:3,name:'יאריס',plate:'778-89-900'}
+];
+
+function ls(k){try{var v=localStorage.getItem('lx5_'+k);return v?JSON.parse(v):null;}catch(e){return null;}}
+function ss(k,v){try{localStorage.setItem('lx5_'+k,JSON.stringify(v));}catch(e){}}
+
+function init(){
+  tasks=ls('tasks')||getSampleTasks();
+  bookings=ls('bookings')||getSampleBookings();
+  history=ls('history')||[];
+  settings=ls('settings')||{morningHour:8};
+  fleet=ls('fleet')||JSON.parse(JSON.stringify(DEFAULT_FLEET));
+  custNotes=ls('custNotes')||[];
+  document.getElementById('morningTime').value=(settings.morningHour||8).toString().padStart(2,'0')+':00';
+  render(); renderHist(); renderSettings();
+  setInterval(updateClock, 30000);
+  updateClock();
+}
+
+function getSampleTasks(){
+  return[
+    {id:1,name:'דוד אברהם',plate:'234-56-789',phone:'054-1234567',status:'manager',priority:'high',note:'מחכה לאישור תיקון מנוע — 3,200₪',remind:'',done:false},
+    {id:2,name:'רחל כהן',plate:'987-65-432',phone:'052-9876543',status:'me',priority:'high',note:'להחזיר עם הצעת מחיר לתיבת הילוכים',remind:'',done:false},
+    {id:3,name:'משה לוי',plate:'111-22-333',phone:'050-1112222',status:'parts',priority:'med',note:'ממתין לחלק — מסנן שמן UX250h',remind:'',done:false}
+  ];
+}
+function getSampleBookings(){
+  var now=new Date();
+  function d(o,h,m){var x=new Date(now);x.setDate(x.getDate()+o);x.setHours(h,m,0,0);return x.toISOString();}
+  return[
+    {id:1,carId:1,customer:'דוד אברהם',phone:'054-1234567',plate:'234-56-789',pickup:d(0,9,0),returnEst:d(2,17,0),kmOut:'45200',note:'',status:'active'},
+    {id:2,carId:3,customer:'משה לוי',phone:'050-1112222',plate:'111-22-333',pickup:d(0,14,0),returnEst:d(1,9,0),kmOut:'31000',note:'בדוק דלק',status:'active'},
+    {id:3,carId:2,customer:'שירה גולן',phone:'053-4455667',plate:'555-44-333',pickup:d(2,10,30),returnEst:d(4,10,0),kmOut:'',note:'',status:'pending'}
+  ];
+}
+
+function updateClock(){
+  var now=new Date();
+  document.getElementById('clockDisp').textContent=now.toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'});
+  document.getElementById('dateDisp').textContent=now.toLocaleDateString('he-IL',{weekday:'long',day:'numeric',month:'long'});
+  document.getElementById('dayName').textContent=now.toLocaleDateString('he-IL',{weekday:'long'});
+}
+
+function isPast(iso){return new Date(iso)<new Date();}
+function isToday(iso){return new Date(iso).toDateString()===new Date().toDateString();}
+function isTomorrow(iso){var t=new Date();t.setDate(t.getDate()+1);return new Date(iso).toDateString()===t.toDateString();}
+function fmtTime(iso){return new Date(iso).toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'});}
+function fmtDT(iso){return new Date(iso).toLocaleString('he-IL',{day:'numeric',month:'numeric',hour:'2-digit',minute:'2-digit'});}
+function dayKey(iso){var d=new Date(iso);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function dayLabel(k){
+  var d=new Date(k+'T12:00:00'),n=new Date(),t=new Date();t.setDate(t.getDate()+1);
+  var iT=d.toDateString()===n.toDateString(),iTo=d.toDateString()===t.toDateString();
+  var lbl=d.toLocaleDateString('he-IL',{weekday:'long',day:'numeric',month:'long'});
+  return{label:iT?'היום — '+lbl:iTo?'מחר — '+lbl:lbl,iT:iT};
+}
+function sLabel(s){return{me:'ממתין לי',manager:'ממתין למנהל',parts:'ממתין למחסן'}[s]||s;}
+function sBadge(s){return{me:'b-me',manager:'b-mgr',parts:'b-pts'}[s]||'';}
+function carName(id){var c=fleet.find(function(c){return c.id===id;});return c?c.name:'';}
+function carPlate(id){var c=fleet.find(function(c){return c.id===id;});return c?c.plate:'';}
+function getCustNote(name){return custNotes.find(function(c){return c.name.trim()===name.trim();});}
+
+function showTab(name){
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
+  document.querySelectorAll('.sec').forEach(function(s){s.classList.remove('active');});
+  var tabs=['tasks','cars','ai','hist','settings'];
+  tabs.forEach(function(n,i){if(n===name)document.querySelectorAll('.tab')[i].classList.add('active');});
+  document.getElementById('tab-'+name).classList.add('active');
+  if(name==='settings')renderSettings();
+  if(name==='hist')renderHist();
+}
+
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+
+function setPri(p){
+  curPri=p;
+  ['high','med','low'].forEach(function(x){
+    var el=document.getElementById('pri-'+x);
+    el.className='pri-opt'+(p===x?' pri-'+x:'');
+  });
+}
+
+function openTaskModal(id){
+  curPri='high';
+  ['high','med','low'].forEach(function(x){document.getElementById('pri-'+x).className='pri-opt'+(x==='high'?' pri-high':'');});
+  document.getElementById('tm-id').value='';
+  document.getElementById('tmTitle').textContent='משימה חדשה';
+  ['tm-name','tm-plate','tm-phone','tm-note'].forEach(function(x){document.getElementById(x).value='';});
+  document.getElementById('tm-status').value='me';
+  var now=new Date();now.setHours(now.getHours()+1,0,0,0);
+  document.getElementById('tm-remind').value=now.toISOString().slice(0,16);
+  if(id){
+    var t=tasks.find(function(t){return t.id===id;});
+    if(!t)return;
+    document.getElementById('tm-id').value=id;
+    document.getElementById('tmTitle').textContent='עריכת משימה';
+    document.getElementById('tm-name').value=t.name;
+    document.getElementById('tm-plate').value=t.plate||'';
+    document.getElementById('tm-phone').value=t.phone||'';
+    document.getElementById('tm-status').value=t.status;
+    document.getElementById('tm-note').value=t.note||'';
+    document.getElementById('tm-remind').value=t.remind||'';
+    curPri=t.priority||'high';
+    ['high','med','low'].forEach(function(x){document.getElementById('pri-'+x).className='pri-opt'+(curPri===x?' pri-'+x:'');});
+  }
+  document.getElementById('taskModal').classList.add('open');
+}
+
+function saveTask(){
+  var name=document.getElementById('tm-name').value.trim();
+  if(!name)return;
+  var eid=document.getElementById('tm-id').value;
+  var data={name:name,plate:document.getElementById('tm-plate').value.trim(),phone:document.getElementById('tm-phone').value.trim(),status:document.getElementById('tm-status').value,priority:curPri,note:document.getElementById('tm-note').value.trim(),remind:document.getElementById('tm-remind').value,done:false};
+  if(eid){var i=tasks.findIndex(function(t){return t.id==eid;});if(i>-1)tasks[i]=Object.assign(tasks[i],data);}
+  else tasks.unshift(Object.assign({id:Date.now(),created:Date.now()},data));
+  ss('tasks',tasks);closeModal('taskModal');render();
+}
+
+function openDoneModal(id){
+  document.getElementById('dm-id').value=id;
+  document.getElementById('dm-note').value='';
+  document.getElementById('doneModal').classList.add('open');
+}
+
+function confirmDone(){
+  var id=parseInt(document.getElementById('dm-id').value);
+  var t=tasks.find(function(t){return t.id===id;});
+  if(!t)return;
+  history.unshift({id:Date.now(),name:t.name,plate:t.plate,note:t.note,closingNote:document.getElementById('dm-note').value.trim(),status:t.status,completedAt:new Date().toLocaleString('he-IL')});
+  tasks=tasks.filter(function(t){return t.id!==id;});
+  ss('tasks',tasks);ss('history',history);
+  closeModal('doneModal');render();renderHist();
+}
+
+function delTask(id){if(!confirm('למחוק?'))return;tasks=tasks.filter(function(t){return t.id!==id;});ss('tasks',tasks);render();}
+
+function snooze(id,h){
+  var t=tasks.find(function(t){return t.id===id;});
+  if(!t)return;
+  var b=t.remind?new Date(t.remind):new Date();
+  b.setHours(b.getHours()+h);
+  t.remind=b.toISOString().slice(0,16);
+  ss('tasks',tasks);render();
+}
+
+function openRemindModal(id){
+  var t=tasks.find(function(t){return t.id===id;});
+  if(!t)return;
+  document.getElementById('rm-task-id').value=id;
+  var p=document.getElementById('remindPreview');
+  p.innerHTML='<div class="remind-preview-name">'+t.name+'</div>'+(t.note?'<div class="remind-preview-note">'+t.note+'</div>':'');
+  var def=new Date();def.setHours(def.getHours()+1,0,0,0);
+  document.getElementById('rm-time').value=def.toISOString().slice(0,16);
+  document.getElementById('remindModal').classList.add('open');
+}
+
+function setQuickRemind(h){
+  var d=new Date();
+  if(h===0){d.setDate(d.getDate()+1);d.setHours(8,0,0,0);}
+  else d.setHours(d.getHours()+h,0,0,0);
+  document.getElementById('rm-time').value=d.toISOString().slice(0,16);
+}
+
+function saveRemind(){
+  var id=parseInt(document.getElementById('rm-task-id').value);
+  var time=document.getElementById('rm-time').value;
+  if(!time)return;
+  if(isPast(time)){alert('התאריך שנבחר כבר עבר');return;}
+  tasks=tasks.map(function(t){return t.id===id?Object.assign({},t,{remind:time}):t;});
+  ss('tasks',tasks);closeModal('remindModal');render();
+}
+
+function setFilter(f){curFilter=f;render();}
+
+function setCV(v){
+  curCV=v;
+  document.getElementById('vt-tl').className='vt-btn'+(v==='tl'?' on':'');
+  document.getElementById('vt-fl').className='vt-btn'+(v==='fl'?' on':'');
+  document.getElementById('cv-tl').style.display=v==='tl'?'block':'none';
+  document.getElementById('cv-fl').style.display=v==='fl'?'block':'none';
+}
+
+function populateCarSelect(){
+  var sel=document.getElementById('bm-car');
+  sel.innerHTML=fleet.map(function(c){return'<option value="'+c.id+'">'+c.name+' — '+c.plate+'</option>';}).join('');
+}
+
+function openBookingModal(id){
+  populateCarSelect();
+  document.getElementById('bm-id').value='';
+  document.getElementById('bmTitle').textContent='הזמנת חליפי חדשה';
+  ['bm-cust','bm-phone','bm-plate','bm-km','bm-note'].forEach(function(x){document.getElementById(x).value='';});
+  document.getElementById('confB').style.display='none';
+  var now=new Date();now.setMinutes(0,0,0);
+  document.getElementById('bm-pickup').value=now.toISOString().slice(0,16);
+  var ret=new Date(now);ret.setDate(ret.getDate()+2);
+  document.getElementById('bm-return').value=ret.toISOString().slice(0,16);
+  if(id){
+    var b=bookings.find(function(b){return b.id===id;});
+    if(!b)return;
+    document.getElementById('bm-id').value=id;
+    document.getElementById('bmTitle').textContent='עריכת הזמנה';
+    document.getElementById('bm-cust').value=b.customer;
+    document.getElementById('bm-phone').value=b.phone||'';
+    document.getElementById('bm-plate').value=b.plate||'';
+    document.getElementById('bm-car').value=b.carId;
+    document.getElementById('bm-pickup').value=b.pickup.slice(0,16);
+    document.getElementById('bm-return').value=b.returnEst.slice(0,16);
+    document.getElementById('bm-km').value=b.kmOut||'';
+    document.getElementById('bm-note').value=b.note||'';
+  }
+  document.getElementById('bookingModal').classList.add('open');
+}
+
+function checkConflict(carId,pickup,ret,exId){
+  var p=new Date(pickup),r=new Date(ret);
+  return bookings.some(function(b){return b.id!==exId&&b.carId===carId&&b.status!=='returned'&&p<new Date(b.returnEst)&&r>new Date(b.pickup);});
+}
+
+function saveBooking(){
+  var cust=document.getElementById('bm-cust').value.trim();if(!cust)return;
+  var carId=parseInt(document.getElementById('bm-car').value);
+  var pickup=document.getElementById('bm-pickup').value;
+  var ret=document.getElementById('bm-return').value;
+  var eid=document.getElementById('bm-id').value;
+  if(checkConflict(carId,pickup,ret,eid?parseInt(eid):null)){document.getElementById('confB').style.display='block';return;}
+  var data={carId:carId,customer:cust,phone:document.getElementById('bm-phone').value.trim(),plate:document.getElementById('bm-plate').value.trim(),pickup:pickup,returnEst:ret,kmOut:document.getElementById('bm-km').value,note:document.getElementById('bm-note').value.trim(),status:new Date(pickup)<=new Date()?'active':'pending'};
+  if(eid){var i=bookings.findIndex(function(b){return b.id==eid;});if(i>-1)bookings[i]=Object.assign(bookings[i],data);}
+  else bookings.push(Object.assign({id:Date.now()},data));
+  ss('bookings',bookings);closeModal('bookingModal');render();
+}
+
+function openRetModal(id){
+  document.getElementById('ret-id').value=id;
+  document.getElementById('ret-km').value='';
+  document.getElementById('ret-note').value='';
+  document.getElementById('retModal').classList.add('open');
+}
+
+function confirmReturn(){
+  var id=parseInt(document.getElementById('ret-id').value);
+  bookings=bookings.map(function(b){return b.id===id?Object.assign({},b,{status:'returned',kmIn:document.getElementById('ret-km').value,returnCond:document.getElementById('ret-cond').value,returnNote:document.getElementById('ret-note').value,actualReturn:new Date().toISOString()}):b;});
+  ss('bookings',bookings);closeModal('retModal');render();
+}
+
+function openCustNoteModal(){
+  document.getElementById('cn-name').value='';
+  document.getElementById('cn-note').value='';
+  document.getElementById('custNoteModal').classList.add('open');
+}
+
+function saveCustNote(){
+  var name=document.getElementById('cn-name').value.trim();
+  var note=document.getElementById('cn-note').value.trim();
+  if(!name||!note)return;
+  custNotes.push({id:Date.now(),name:name,note:note});
+  ss('custNotes',custNotes);closeModal('custNoteModal');renderSettings();
+}
+
+function addCar(){
+  var n=prompt('שם הרכב:');if(!n)return;
+  var p=prompt('מספר לוחית:');if(!p)return;
+  fleet.push({id:Date.now(),name:n,plate:p});
+  ss('fleet',fleet);renderSettings();
+}
+
+function saveSettings(){
+  var h=parseInt(document.getElementById('morningTime').value.split(':')[0]);
+  settings.morningHour=h;ss('settings',settings);
+}
+
+function clearAll(){
+  if(!confirm('למחוק הכל?'))return;
+  tasks=[];bookings=[];history=[];custNotes=[];
+  ss('tasks',tasks);ss('bookings',bookings);ss('history',history);ss('custNotes',custNotes);
+  render();renderHist();
+}
+
+function showExport(){
+  var now=new Date();
+  var open=tasks.filter(function(t){return!t.done;});
+  var urgent=open.filter(function(t){return t.status==='me';});
+  var waiting=open.filter(function(t){return t.status!=='me';});
+  var todayBk=bookings.filter(function(b){return b.status!=='returned'&&isToday(b.pickup);});
+  var tomBk=bookings.filter(function(b){return b.status!=='returned'&&isTomorrow(b.returnEst);});
+  var txt='סיכום יומי — '+now.toLocaleDateString('he-IL',{weekday:'long',day:'numeric',month:'long'})+'\n';
+  txt+='━━━━━━━━━━━━━━━━━━━━\n\n';
+  if(urgent.length){txt+='🔴 דחוף — ממתין לי ('+urgent.length+'):\n';urgent.forEach(function(t){txt+='• '+t.name+(t.plate?' ('+t.plate+')':'')+' — '+(t.note||'')+'\n';});}
+  if(waiting.length){txt+='\n⏳ ממתין לאחרים ('+waiting.length+'):\n';waiting.forEach(function(t){txt+='• '+t.name+' — '+(t.note||'')+' ['+sLabel(t.status)+']\n';});}
+  if(todayBk.length){txt+='\n🚗 חליפיים יוצאים היום:\n';todayBk.forEach(function(b){txt+='• '+b.customer+' | '+carName(b.carId)+' '+carPlate(b.carId)+' | '+fmtTime(b.pickup)+'\n';});}
+  if(tomBk.length){txt+='\n🔔 חליפיים חוזרים מחר:\n';tomBk.forEach(function(b){txt+='• '+b.customer+' | '+carPlate(b.carId)+'\n';});}
+  if(!urgent.length&&!waiting.length)txt+='✅ אין משימות פתוחות\n';
+  document.getElementById('exportText').textContent=txt;
+  document.getElementById('exportModal').classList.add('open');
+}
+
+function copyExport(){
+  try{navigator.clipboard.writeText(document.getElementById('exportText').textContent);}catch(e){}
+  alert('הועתק!');
+}
+
+function copyAI(){
+  try{navigator.clipboard.writeText(document.getElementById('aiRes').textContent);}catch(e){}
+  alert('הועתק!');
+}
+
+async function genAI(){
+  var sit=document.getElementById('aiSit').value.trim();
+  var ans=document.getElementById('aiAns').value.trim();
+  if(!sit||!ans){alert('מלא את שני השדות');return;}
+  var types={rejection:'דחיית בקשת אחריות',delay:'עיכוב בחלק/תיקון',price:'הצגת מחיר גבוה',ready:'רכב מוכן לאיסוף',followup:'מעקב/חזרה ללקוח',other:'כללי'};
+  document.getElementById('aiLoad').style.display='block';
+  document.getElementById('aiRes').style.display='none';
+  document.getElementById('copyBtn').style.display='none';
+  try{
+    var res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:'אתה יועץ שירות בכיר בסוכנות לקסוס בישראל. נסח תשובות ללקוחות בעברית: מקצועי, ברור, אמפתי. ללא התנצלות מיותרת. רק הניסוח עצמו. סוג: '+types[document.getElementById('aiType').value]+'.',messages:[{role:'user',content:'סיטואציה: '+sit+'\n\nמידע/תשובה: '+ans+'\n\nנסח מה לומר ללקוח.'}]})});
+    var data=await res.json();
+    var text=(data.content&&data.content[0]&&data.content[0].text)||'שגיאה';
+    document.getElementById('aiRes').textContent=text;
+    document.getElementById('aiRes').style.display='block';
+    document.getElementById('copyBtn').style.display='block';
+  }catch(e){
+    document.getElementById('aiRes').textContent='שגיאה בחיבור לשרת';
+    document.getElementById('aiRes').style.display='block';
+  }
+  document.getElementById('aiLoad').style.display='none';
+}
+
+function render(){
+  var now=new Date();
+  var open=tasks.filter(function(t){return!t.done;});
+  document.getElementById('sU').textContent=open.filter(function(t){return t.status==='me';}).length;
+  document.getElementById('sO').textContent=open.length;
+  document.getElementById('sC').textContent=bookings.filter(function(b){return b.status==='active';}).length;
+  document.getElementById('sR').textContent=open.filter(function(t){return t.remind&&isToday(t.remind);}).length;
+
+  var bhtml='';
+  var odT=open.filter(function(t){return t.remind&&isPast(t.remind);});
+  if(odT.length)bhtml+='<div class="banner bdanger"><div class="banner-t">⚠️ '+odT.length+' תזכורות פג תוקף</div>'+odT.map(function(t){return t.name;}).join(' · ')+'</div>';
+  var odR=bookings.filter(function(b){return b.status==='active'&&isPast(b.returnEst);});
+  if(odR.length)bhtml+='<div class="banner bdanger"><div class="banner-t">🚗 חליפי באיחור</div>'+odR.map(function(b){return b.customer+' ('+carPlate(b.carId)+')';}).join(' · ')+'</div>';
+  var tomR=bookings.filter(function(b){return b.status==='active'&&isTomorrow(b.returnEst);});
+  if(tomR.length)bhtml+='<div class="banner bwarn"><div class="banner-t">🔔 חליפי חוזר מחר — '+tomR.map(function(b){return carPlate(b.carId);}).join(', ')+'</div>וודא שהרכב פנוי</div>';
+  document.getElementById('alertBanners').innerHTML=bhtml;
+
+  var filters=[['all','הכל'],['me','ממתין לי'],['manager','מנהל'],['parts','מחסן']];
+  document.getElementById('filterChips').innerHTML=filters.map(function(f){return'<button class="chip'+(curFilter===f[0]?' on':'')+'" onclick="setFilter(\''+f[0]+'\')">'+f[1]+'</button>';}).join('');
+
+  var q=(document.getElementById('taskSearch')||{value:''}).value.trim().toLowerCase();
+  var filtered=open.filter(function(t){return curFilter==='all'||t.status===curFilter;});
+  if(q)filtered=filtered.filter(function(t){return(t.name+t.plate+t.phone+t.note).toLowerCase().indexOf(q)>-1;});
+  filtered.sort(function(a,b){return({'high':0,'med':1,'low':2}[a.priority]||1)-({'high':0,'med':1,'low':2}[b.priority]||1);});
+
+  var tl=document.getElementById('taskList');
+  if(!filtered.length){tl.innerHTML='<div class="empty">😊<br/>אין משימות פתוחות</div>';return;}
+  tl.innerHTML=filtered.map(function(t){
+    var od=t.remind&&isPast(t.remind);
+    var cn=getCustNote(t.name);
+    var pc=t.priority==='high'?'card-high':t.priority==='low'?'card-low':'card-med';
+    return'<div class="card '+pc+'">'+
+      '<div class="card-row"><div>'+
+      '<div class="card-name">'+t.name+'</div>'+
+      '<div class="card-meta">'+
+      (t.plate?'<span>🚗 '+t.plate+'</span>':'')+
+      (t.phone?'<span>📞 '+t.phone+'</span>':'')+
+      '</div></div>'+
+      '<span class="badge '+sBadge(t.status)+'">'+sLabel(t.status)+'</span>'+
+      '</div>'+
+      (cn?'<div class="cust-note">⚠️ '+cn.note+'</div>':'')+
+      (t.note?'<div class="card-note">'+t.note+'</div>':'')+
+      (t.remind?'<div class="rem-tag'+(od?' rem-od':'')+'">🔔 '+fmtDT(t.remind)+(od?' — עבר':'')+'</div>':'')+
+      '<div class="acts">'+
+      (t.phone?'<button class="tb tb-blue" onclick="window.open(\'tel:'+t.phone+'\')">📞 חייג</button>':'')+
+      '<button class="tb tb-green" onclick="openDoneModal('+t.id+')">✓ סיים</button>'+
+      '<button class="tb tb-orange" onclick="openRemindModal('+t.id+')">🔔</button>'+
+      '<button class="tb" onclick="openTaskModal('+t.id+')">✏️</button>'+
+      '<button class="tb tb-red" onclick="delTask('+t.id+')">🗑️</button>'+
+      '</div>'+
+      (t.remind?'<div class="snooze">'+
+      '<button class="snz-btn" onclick="snooze('+t.id+',1)">+1ש\'</button>'+
+      '<button class="snz-btn" onclick="snooze('+t.id+',2)">+2ש\'</button>'+
+      '<button class="snz-btn" onclick="snooze('+t.id+',24)">+יום</button>'+
+      '</div>':'')+
+      '</div>';
+  }).join('');
+
+  var activeB=bookings.filter(function(b){return b.status!=='returned';});
+  var events=[];
+  activeB.forEach(function(b){
+    var od=new Date(b.returnEst)<new Date()&&b.status==='active';
+    events.push({type:'pickup',date:b.pickup,b:b});
+    events.push({type:od?'overdue':'return',date:b.returnEst,b:b});
+  });
+  events.sort(function(a,b){return new Date(a.date)-new Date(b.date);});
+  var byDay={};
+  events.forEach(function(e){var k=dayKey(e.date);if(!byDay[k])byDay[k]=[];byDay[k].push(e);});
+
+  var tlc=document.getElementById('tlContent');
+  var days=Object.keys(byDay).sort();
+  if(!days.length){tlc.innerHTML='<div class="empty">📅<br/>אין הזמנות פעילות</div>';}
+  else{
+    tlc.innerHTML=days.map(function(k){
+      var dl=dayLabel(k);
+      return'<div class="tl-day">'+
+        '<div class="tl-dlbl'+(dl.iT?' tod':'')+'">'+dl.label+'</div>'+
+        byDay[k].map(function(e){
+          var b=e.b;
+          var tl=e.type==='pickup'?'איסוף':e.type==='overdue'?'חזרה — באיחור!':'החזרה משוערת';
+          var tc=e.type==='pickup'?'tl-cp':e.type==='overdue'?'tl-co':'tl-cr';
+          var dc=e.type==='pickup'?'dp':e.type==='overdue'?'do':'dr';
+          var tt=e.type==='pickup'?'ttp':e.type==='overdue'?'tto':'ttr';
+          var acts=e.type==='pickup'?
+            '<button class="tb tb-blue" onclick="openBookingModal('+b.id+')">✏️ ערוך</button>'+
+            (b.phone?'<button class="tb" onclick="window.open(\'tel:'+b.phone+'\')">📞</button>':'')+
+            '<button class="tb tb-red" onclick="delBookingF('+b.id+')">🗑️</button>':
+            '<button class="tb tb-green" onclick="openRetModal('+b.id+')">✓ קיבלתי בחזרה</button>';
+          return'<div class="tl-item">'+
+            '<div class="tl-time">'+fmtTime(e.date)+'</div>'+
+            '<div class="tl-line"><div class="tl-dot '+dc+'"></div><div class="tl-bar"></div></div>'+
+            '<div class="tl-card '+tc+'">'+
+            '<div class="tl-type '+tt+'">'+tl+'</div>'+
+            '<div class="tl-name">'+b.customer+'</div>'+
+            '<div class="tl-sub">'+carName(b.carId)+' · '+carPlate(b.carId)+(b.plate?' | רכב: '+b.plate:'')+'</div>'+
+            (b.note?'<div class="tl-sub">📝 '+b.note+'</div>':'')+
+            '<div class="acts" style="margin-top:5px;">'+acts+'</div>'+
+            '</div></div>';
+        }).join('')+
+        '</div>';
+    }).join('');
+  }
+
+  var flc=document.getElementById('flContent');
+  flc.innerHTML=fleet.map(function(car){
+    var cb=activeB.filter(function(b){return b.carId===car.id;}).sort(function(a,b){return new Date(a.pickup)-new Date(b.pickup);});
+    var cur=cb.find(function(b){return b.status==='active';});
+    var bt=!cur&&!cb.length?'av-free':cur?(isPast(cur.returnEst)?'av-warn':'av-busy'):'av-free';
+    var bl=bt==='av-free'?'פנוי':bt==='av-warn'?'באיחור':'תפוס';
+    return'<div class="fleet-card">'+
+      '<div class="fleet-hdr"><div>'+
+      '<div class="fleet-name">'+car.name+'</div>'+
+      '<div class="fleet-plate">'+car.plate+'</div>'+
+      '</div><span class="av-badge '+bt+'">'+bl+'</span></div>'+
+      (cb.length?'<div class="fleet-bk">'+cb.map(function(b){return'<div class="bk-row"><div><div class="bk-name">'+b.customer+'</div><div class="bk-dates">'+fmtDT(b.pickup)+' ← '+fmtDT(b.returnEst)+'</div></div><div style="display:flex;gap:3px;">'+(b.status==='active'?'<button class="tb tb-green" onclick="openRetModal('+b.id+')" style="padding:3px 6px;">החזיר</button>':'')+'<button class="tb" onclick="openBookingModal('+b.id+')" style="padding:3px 6px;">✏️</button></div></div>';}).join('')+'</div>':'<div style="font-size:12px;color:#999;margin-bottom:6px;">אין הזמנות קרובות</div>')+
+      '<button class="add-btn" style="margin-bottom:0;margin-top:7px;" onclick="openBookingModal()">+ הזמן</button>'+
+      '</div>';
+  }).join('');
+}
+
+function delBookingF(id){bookings=bookings.filter(function(b){return b.id!==id;});ss('bookings',bookings);render();}
+
+function renderHist(){
+  var q=(document.getElementById('histSearch')||{value:''}).value.trim().toLowerCase();
+  var h=history.filter(function(x){return!q||(x.name+x.plate+x.note+x.closingNote).toLowerCase().indexOf(q)>-1;}).slice(0,50);
+  document.getElementById('histList').innerHTML=h.length?h.map(function(x){return'<div class="hist-item"><div class="hist-hdr"><div class="hist-name">'+x.name+(x.plate?' — '+x.plate:'')+'</div><div class="hist-date">'+x.completedAt+'</div></div>'+(x.note?'<div class="hist-note">'+x.note+'</div>':'')+(x.closingNote?'<div class="hist-closing">✓ '+x.closingNote+'</div>':'')+'</div>';}).join(''):'<div class="empty">אין היסטוריה עדיין</div>';
+}
+
+function renderSettings(){
+  document.getElementById('carSettingsList').innerHTML=fleet.map(function(c){return'<div class="set-row"><div style="display:flex;gap:5px;flex-wrap:wrap;"><input class="set-input" value="'+c.name+'" style="width:100px;" onblur="updateCar('+c.id+',\'name\',this.value)"/><input class="set-input" value="'+c.plate+'" style="width:105px;" onblur="updateCar('+c.id+',\'plate\',this.value)"/></div><button class="tb tb-red" onclick="removeCar('+c.id+')">🗑️</button></div>';}).join('');
+  document.getElementById('custNotesList').innerHTML=custNotes.length?custNotes.map(function(c){return'<div class="set-row"><div><div class="set-label2">'+c.name+'</div><div class="set-sub">'+c.note+'</div></div><button class="tb tb-red" onclick="delCustNote('+c.id+')">🗑️</button></div>';}).join(''):'<div style="font-size:12px;color:#999;padding:8px 0;">אין הערות עדיין</div>';
+}
+
+function updateCar(id,field,val){fleet=fleet.map(function(c){return c.id===id?Object.assign({},c,JSON.parse('{\"'+field+'\":\"'+val+'\"}')):c;});ss('fleet',fleet);}
+function removeCar(id){if(!confirm('להסיר?'))return;fleet=fleet.filter(function(c){return c.id!==id;});ss('fleet',fleet);renderSettings();}
+function delCustNote(id){custNotes=custNotes.filter(function(c){return c.id!==id;});ss('custNotes',custNotes);renderSettings();}
+
+init();
+</script>
+</body>
+</html>
