@@ -322,12 +322,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;di
   <input type="hidden" id="bm-id"/>
   <div class="conf-banner" id="confB">קונפליקט — הרכב תפוס בתאריכים אלה.</div>
   <div class="field"><label>לקוח *</label><input type="text" id="bm-cust" placeholder="שם מלא"/></div>
-  <div class="field"><label>טלפון</label><input type="tel" id="bm-phone" placeholder="050-0000000" dir="ltr"/></div>
+  <div class="field"><label>טלפון</label><input type="hidden" id="bm-phone" placeholder="050-0000000" dir="ltr"/></div>
   <div class="field"><label>רכב לקוח</label><input type="text" id="bm-plate" placeholder="מספר רכב"/></div>
   <div class="field"><label>רכב חליפי</label><select id="bm-car"></select></div>
-  <div class="field"><label>תאריך ושעת איסוף *</label><input type="datetime-local" id="bm-pickup"/></div>
-  <div class="field"><label>תאריך ושעת החזרה משוערת *</label><input type="datetime-local" id="bm-return"/></div>
-  <div class="field"><label>ק"מ יציאה</label><input type="number" id="bm-km" placeholder="45000" dir="ltr"/></div>
+  <div class="field"><label>תאריך ושעת איסוף *</label><input type="text" id="bm-pickup" placeholder="לדוגמה: 11/06 09:00"/></div>
+  <div class="field"><label>תאריך ושעת החזרה משוערת *</label><input type="text" id="bm-return" placeholder="לדוגמה: 13/06 17:00"/></div>
+  <div class="field"><label>ק"מ יציאה</label><input type="hidden" id="bm-km" placeholder="45000" dir="ltr"/></div>
   <div class="field"><label>הערה</label><input type="text" id="bm-note" placeholder="אופציונלי"/></div>
   <div class="macts">
     <button class="btn-cancel" onclick="closeModal('bookingModal')">ביטול</button>
