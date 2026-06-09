@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { storage } from './storage';
 import { requestNotificationPermission, scheduleMorningBriefing, scheduleTaskReminder, scheduleLoanerReminder } from './notifications';
 import styles from './App.module.css';
@@ -23,7 +23,7 @@ function load(key, fallback) {
 function save(key, val) { storage.set(key, JSON.stringify(val)); }
 
 function fmtTime(iso) { return new Date(iso).toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' }); }
-function fmtDate(iso) { return new Date(iso).toLocaleDateString('he-IL', { day: 'numeric', month: 'numeric' }); }
+
 function fmtDT(iso) { return new Date(iso).toLocaleString('he-IL', { day: 'numeric', month: 'numeric', hour: '2-digit', minute: '2-digit' }); }
 function isPast(iso) { return new Date(iso) < new Date(); }
 function isToday(iso) { return new Date(iso).toDateString() === new Date().toDateString(); }
