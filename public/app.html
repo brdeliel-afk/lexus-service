@@ -599,7 +599,7 @@ function saveBooking(){
   var pickup=document.getElementById('bm-pickup').value;
   var ret=document.getElementById('bm-return').value;
   var eid=document.getElementById('bm-id').value;
-  if(checkConflict(carId,pickup,ret,eid?parseInt(eid):null)){document.getElementById('confB').style.display='block';return;}
+  if(pickup&&ret&&checkConflict(carId,pickup,ret,eid?parseInt(eid):null)){document.getElementById("confB").style.display="block";return;}
   var data={carId:carId,customer:cust,phone:document.getElementById('bm-phone').value.trim(),plate:document.getElementById('bm-plate').value.trim(),pickup:pickup,returnEst:ret,kmOut:document.getElementById('bm-km').value,note:document.getElementById('bm-note').value.trim(),status:new Date(pickup)<=new Date()?'active':'pending'};
   if(eid){var i=bookings.findIndex(function(b){return b.id==eid;});if(i>-1)bookings[i]=Object.assign(bookings[i],data);}
   else bookings.push(Object.assign({id:Date.now()},data));
